@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -49,17 +49,41 @@ const Label = styled.label`
   flex: 1;
 `;
 
+const ErrorMessage = styled.div`
+  color: #ff4d4d;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+`;
+
 const Form2 = ({ formData, setFormData }) => {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       receiverDetails: {
         ...prevData.receiverDetails,
-        [e.target.name]: e.target.value
-      }
+        [e.target.name]: e.target.value,
+      },
     }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.receiverDetails.name) newErrors.name = 'Name is required';
+    if (!formData.receiverDetails.email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.receiverDetails.email)) {
+      newErrors.email = 'Email address is invalid';
+    }
+    if (!formData.receiverDetails.address) newErrors.address = 'Address is required';
+    if (!formData.receiverDetails.phone) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^\d{10}$/.test(formData.receiverDetails.phone)) {
+      newErrors.phone = 'Phone number is invalid';
+    }
+    return newErrors;
   };
 
   const handlePrevious = () => {
@@ -67,7 +91,12 @@ const Form2 = ({ formData, setFormData }) => {
   };
 
   const handleNext = () => {
-    navigate('/form3');
+    const newErrors = validate();
+    if (Object.keys(newErrors).length === 0) {
+      navigate('/form3');
+    } else {
+      setErrors(newErrors);
+    }
   };
 
   return (
@@ -77,20 +106,24 @@ const Form2 = ({ formData, setFormData }) => {
         <Label>
           Name:
           <Input type="text" name="name" value={formData.receiverDetails.name || ''} onChange={handleChange} required />
+          {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
         </Label>
         <Label>
           Email:
           <Input type="email" name="email" value={formData.receiverDetails.email || ''} onChange={handleChange} required />
+          {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
         </Label>
       </InputRow>
       <InputRow>
         <Label>
           Address:
           <Input type="text" name="address" value={formData.receiverDetails.address || ''} onChange={handleChange} required />
+          {errors.address && <ErrorMessage>{errors.address}</ErrorMessage>}
         </Label>
         <Label>
           Phone Number:
           <Input type="tel" name="phone" value={formData.receiverDetails.phone || ''} onChange={handleChange} required />
+          {errors.phone && <ErrorMessage>{errors.phone}</ErrorMessage>}
         </Label>
       </InputRow>
       <Button onClick={handlePrevious}>Previous</Button>

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Modal from '../Modal';
-// import Modal from '../Modal'; // Import the Modal component
+import Modal from '../Modal'; // Ensure the correct path for Modal import
 
 const FormContainer = styled.div`
   display: flex;
@@ -51,10 +50,16 @@ const Label = styled.label`
   flex: 1;
 `;
 
+const ErrorMessage = styled.div`
+  color: #ff4d4d;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+`;
+
 const Form4 = ({ formData, setFormData }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editForm, setEditForm] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setFormData(prevData => ({
@@ -66,21 +71,28 @@ const Form4 = ({ formData, setFormData }) => {
     }));
   };
 
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.priceInfo.price) newErrors.price = 'Price is required';
+    if (!formData.priceInfo.currency) newErrors.currency = 'Currency is required';
+    return newErrors;
+  };
+
   const handlePrevious = () => {
     navigate('/form3');
   };
 
   const handleSave = () => {
-    setIsModalOpen(true);
+    const newErrors = validate();
+    if (Object.keys(newErrors).length === 0) {
+      setIsModalOpen(true);
+    } else {
+      setErrors(newErrors);
+    }
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-
-  const handleEdit = (formName) => {
-    navigate(`/${formName}`);
-    setEditForm(formName);
   };
 
   return (
@@ -89,11 +101,25 @@ const Form4 = ({ formData, setFormData }) => {
       <InputRow>
         <Label>
           Price:
-          <Input type="number" name="price" value={formData.priceInfo.price || ''} onChange={handleChange} required />
+          <Input 
+            type="number" 
+            name="price" 
+            value={formData.priceInfo.price || ''} 
+            onChange={handleChange} 
+            required 
+          />
+          {errors.price && <ErrorMessage>{errors.price}</ErrorMessage>}
         </Label>
         <Label>
           Currency:
-          <Input type="text" name="currency" value={formData.priceInfo.currency || ''} onChange={handleChange} required />
+          <Input 
+            type="text" 
+            name="currency" 
+            value={formData.priceInfo.currency || ''} 
+            onChange={handleChange} 
+            required 
+          />
+          {errors.currency && <ErrorMessage>{errors.currency}</ErrorMessage>}
         </Label>
       </InputRow>
       <Button onClick={handlePrevious}>Previous</Button>
@@ -103,7 +129,6 @@ const Form4 = ({ formData, setFormData }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         formData={formData}
-        onEdit={handleEdit}
       />
     </FormContainer>
   );

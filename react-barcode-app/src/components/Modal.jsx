@@ -47,13 +47,15 @@ const CloseButton = styled.button`
   }
 `;
 
-const Modal = ({ isOpen, onClose, formData, onEdit }) => {
+const Modal = ({ isOpen, onClose, formData, onEdit, setFormData }) => {
   const [showBarcode, setShowBarcode] = useState(false);
   const barcodeRef = useRef(null);
+  const [trackno, setTrackno] = useState(null);
   const navigate = useNavigate();
 
   const handleSaveClick = async (details) => {
-    const trackno = uuidv4();
+    let id = uuidv4()
+    setTrackno(id);
     const data = { trackno, details };
 
     try {
@@ -70,6 +72,12 @@ const Modal = ({ isOpen, onClose, formData, onEdit }) => {
       }
 
       setShowBarcode(true);
+      setFormData({
+        senderDetails: {},
+        receiverDetails: {},
+        shipingDetails: {},
+        priceInfo: {},
+      })
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
     }
@@ -121,6 +129,7 @@ const Modal = ({ isOpen, onClose, formData, onEdit }) => {
           <DataSection formData={formData} onEdit={onEdit} onSave={handleSaveClick} onClose={onClose}/>
         ) : (
           <BarcodeSection
+            trackno={trackno}
             barcodeValue={formData}
             barcodeRef={barcodeRef}
             onDownloadPng={handleDownloadPng}

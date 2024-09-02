@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -49,8 +49,15 @@ const Label = styled.label`
   flex: 1;
 `;
 
+const ErrorMessage = styled.div`
+  color: #ff4d4d;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+`;
+
 const Form3 = ({ formData, setFormData }) => {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setFormData(prevData => ({
@@ -62,12 +69,26 @@ const Form3 = ({ formData, setFormData }) => {
     }));
   };
 
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.shipingDetails.shippingMethod) newErrors.shippingMethod = 'Shipping Method is required';
+    if (!formData.shipingDetails.trackingNumber) newErrors.trackingNumber = 'Tracking Number is required';
+    if (!formData.shipingDetails.shippingAddress) newErrors.shippingAddress = 'Shipping Address is required';
+    if (!formData.shipingDetails.shippingPhone) newErrors.shippingPhone = 'Phone Number is required';
+    return newErrors;
+  };
+
   const handlePrevious = () => {
     navigate('/form2');
   };
 
   const handleNext = () => {
-    navigate('/form4');
+    const newErrors = validate();
+    if (Object.keys(newErrors).length === 0) {
+      navigate('/form4');
+    } else {
+      setErrors(newErrors);
+    }
   };
 
   return (
@@ -76,21 +97,49 @@ const Form3 = ({ formData, setFormData }) => {
       <InputRow>
         <Label>
           Shipping Method:
-          <Input type="text" name="shippingMethod" value={formData.shipingDetails.shippingMethod || ''} onChange={handleChange} required />
+          <Input 
+            type="text" 
+            name="shippingMethod" 
+            value={formData.shipingDetails.shippingMethod || ''} 
+            onChange={handleChange} 
+            required 
+          />
+          {errors.shippingMethod && <ErrorMessage>{errors.shippingMethod}</ErrorMessage>}
         </Label>
         <Label>
           Tracking Number:
-          <Input type="text" name="trackingNumber" value={formData.shipingDetails.trackingNumber || ''} onChange={handleChange} required />
+          <Input 
+            type="text" 
+            name="trackingNumber" 
+            value={formData.shipingDetails.trackingNumber || ''} 
+            onChange={handleChange} 
+            required 
+          />
+          {errors.trackingNumber && <ErrorMessage>{errors.trackingNumber}</ErrorMessage>}
         </Label>
       </InputRow>
       <InputRow>
         <Label>
           Shipping Address:
-          <Input type="text" name="shippingAddress" value={formData.shipingDetails.shippingAddress || ''} onChange={handleChange} required />
+          <Input 
+            type="text" 
+            name="shippingAddress" 
+            value={formData.shipingDetails.shippingAddress || ''} 
+            onChange={handleChange} 
+            required 
+          />
+          {errors.shippingAddress && <ErrorMessage>{errors.shippingAddress}</ErrorMessage>}
         </Label>
         <Label>
           Phone Number:
-          <Input type="tel" name="shippingPhone" value={formData.shipingDetails.shippingPhone || ''} onChange={handleChange} required />
+          <Input 
+            type="tel" 
+            name="shippingPhone" 
+            value={formData.shipingDetails.shippingPhone || ''} 
+            onChange={handleChange} 
+            required 
+          />
+          {errors.shippingPhone && <ErrorMessage>{errors.shippingPhone}</ErrorMessage>}
         </Label>
       </InputRow>
       <Button onClick={handlePrevious}>Previous</Button>

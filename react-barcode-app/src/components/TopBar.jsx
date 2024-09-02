@@ -56,7 +56,7 @@ const TopBar = () => {
   return (
     <TopBarContainer>
       <Logo>
-        <Link to="/" style={{ color: '#f0f0f0', textDecoration: 'none' }}>MyApp</Link>
+        <Link to="/" style={{ color: '#f0f0f0', textDecoration: 'none' }}>Delote Technology</Link>
       </Logo>
       <ActionsContainer>
         <Icon>

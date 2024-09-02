@@ -54,16 +54,20 @@ const NestedData = styled.div`
   padding-left: 1rem;
 `;
 
-const renderData = (data) => {
-  if (typeof data === 'object' && data !== null) {
-    return Object.entries(data).map(([key, value]) => (
-      <div key={key}>
-        <strong>{key}:</strong>
-        <NestedData>{renderData(value)}</NestedData>
-      </div>
-    ));
-  }
-  return <span>{data}</span>;
+const JSONTree = styled.div`
+  margin-left: 20px;
+`;
+const renderData = (obj) => {
+  return Object.entries(obj).map(([key, value], index) => (
+    <JSONTree key={index}>
+      <strong>{key}: </strong>
+      {typeof value === 'object' && value !== null ? (
+        renderObject(value)
+      ) : (
+        <span>{value !== undefined && value !== null ? value.toString() : 'null'}</span>
+      )}
+    </JSONTree>
+  ));
 };
 
 const DataSection = ({ formData, onEdit, onSave,onClose }) => {
@@ -71,22 +75,22 @@ const DataSection = ({ formData, onEdit, onSave,onClose }) => {
     <>
       <Section>
         <Label>Sender Address</Label>
-        <Data>{renderData(formData.form1)}</Data>
-        <EditButton onClick={() => onEdit('form1')}>Edit</EditButton>
+        <Data>{renderData(formData.senderDetails)}</Data>
+        <EditButton onClick={() => onEdit('')}>Edit</EditButton>
       </Section>
       <Section>
         <Label>Receiver Address</Label>
-        <Data>{renderData(formData.form2)}</Data>
+        <Data>{renderData(formData.receiverDetails)}</Data>
         <EditButton onClick={() => onEdit('form2')}>Edit</EditButton>
       </Section>
       <Section>
         <Label>Shipping Details</Label>
-        <Data>{renderData(formData.form3)}</Data>
+        <Data>{renderData(formData.shipingDetails)}</Data>
         <EditButton onClick={() => onEdit('form3')}>Edit</EditButton>
       </Section>
       <Section>
         <Label>Price</Label>
-        <Data>{renderData(formData.form4)}</Data>
+        <Data>{renderData(formData.priceInfo)}</Data>
         <EditButton onClick={() => onClose()}>Edit</EditButton>
       </Section>
       <SaveButton onClick={() => onSave(formData)}>Save</SaveButton>

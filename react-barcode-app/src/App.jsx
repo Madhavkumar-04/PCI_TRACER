@@ -36,6 +36,7 @@ function App() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         formData={formData}
+        setFormData={setFormData}
         onEdit={(formName) => {
           setEditForm(formName);
           setIsModalOpen(false);

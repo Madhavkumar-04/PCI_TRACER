@@ -92,7 +92,7 @@ const ProgressTracker = ({ formData }) => {
             key={index}
             active={index <= currentIndex}
           >
-            <ProgressLink to={form.path} active={index <= currentIndex}>
+            <ProgressLink  active={index <= currentIndex}>
               {form.name}
             </ProgressLink>
           </ProgressItem>

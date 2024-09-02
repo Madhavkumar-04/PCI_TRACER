@@ -4,25 +4,44 @@ import styled from 'styled-components';
 
 const OrdersContainer = styled.div`
   padding: 20px;
+  background: #1e1e1e;
+  min-height: 100vh;
+  color: #fff;
 `;
 
 const OrderItem = styled.div`
-  background: #2c2c2c;
+  background: #333;
   margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 20px;
+  border: 1px solid #444;
   border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 `;
 
 const DetailsContainer = styled.div`
-  background: #2c2c2c;
+  background: #2a2a2a;
   padding: 10px;
   border-radius: 8px;
   overflow-x: auto;
+  margin-top: 10px;
+  border: 1px solid #444;
 `;
 
 const JSONTree = styled.div`
   margin-left: 20px;
+  padding-left: 10px;
+  border-left: 2px solid #444;
+  font-family: 'Courier New', Courier, monospace;
+  line-height: 1.5;
+`;
+
+const JSONKey = styled.span`
+  color: #9cdcfe;
+  font-weight: bold;
+`;
+
+const JSONValue = styled.span`
+  color: ${({ type }) => (type === 'string' ? '#ce9178' : type === 'number' ? '#b5cea8' : '#dcdcaa')};
 `;
 
 const Orders = () => {
@@ -44,11 +63,11 @@ const Orders = () => {
   const renderObject = (obj) => {
     return Object.entries(obj).map(([key, value], index) => (
       <JSONTree key={index}>
-        <strong>{key}: </strong>
+        <JSONKey>{key}:</JSONKey>{' '}
         {typeof value === 'object' && value !== null ? (
           renderObject(value)
         ) : (
-          <span>{value !== undefined && value !== null ? value.toString() : 'null'}</span>
+          <JSONValue type={typeof value}>{value !== undefined && value !== null ? value.toString() : 'null'}</JSONValue>
         )}
       </JSONTree>
     ));

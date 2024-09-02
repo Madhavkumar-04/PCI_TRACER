@@ -32,7 +32,7 @@ const Button = styled.button`
   }
 `;
 
-const BarcodeSection = ({ barcodeValue }) => {
+const BarcodeSection = ({ barcodeValue, trackno}) => {
   const barcodeRef = useRef();
 
   useEffect(() => {
@@ -90,10 +90,10 @@ const BarcodeSection = ({ barcodeValue }) => {
     <div ref={barcodeRef}>
       {serializedBarcodeValue ? (
         <Barcode
-          value={serializedBarcodeValue}
+          value={trackno}
           width={1}  // Increase the width of the barcode
           height={150}  // Increase the height of the barcode
-          displayValue={false}  // Display the value below the barcode
+          displayValue={true}  // Display the value below the barcode
           margin={10}  // Add margin to the barcode
           format="CODE128" // Ensure barcode format is correct
         />
