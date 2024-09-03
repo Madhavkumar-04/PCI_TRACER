@@ -51,7 +51,7 @@ const Label = styled.label`
 
 const ErrorMessage = styled.div`
   color: #ff4d4d;
-  margin-top: -0.5rem;
+  // margin-top: -0.5rem;
   margin-bottom: 0.5rem;
 `;
 
