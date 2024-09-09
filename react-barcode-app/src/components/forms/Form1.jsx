@@ -10,11 +10,17 @@ const FormContainer = styled.div`
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin: auto;
 `;
 
 const InputRow = styled.div`
   display: flex;
   gap: 1rem;
+  flex-direction: column;
+
+  @media (min-width: 800px) {
+    flex-direction: row;
+  }
 `;
 
 const Input = styled.input`
@@ -51,7 +57,6 @@ const Label = styled.label`
 
 const ErrorMessage = styled.div`
   color: #ff4d4d;
-  // margin-top: -0.5rem;
   margin-bottom: 0.5rem;
 `;
 

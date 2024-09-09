@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 const TopBarContainer = styled.div`
   width: 100%;
@@ -12,16 +13,32 @@ const TopBarContainer = styled.div`
   padding: 0.5rem 1rem; /* Reduced padding for compact look */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
   height: 4rem; /* Fixed height to control the space */
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+    padding: 0.5rem;
+  }
 `;
 
 const Logo = styled.div`
   font-size: 1.25rem; /* Adjusted font size */
   font-weight: bold;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const ActionsContainer = styled.div`
   display: flex;
   align-items: center;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: space-between;
+  }
 `;
 
 const Icon = styled.div`
@@ -34,6 +51,11 @@ const Icon = styled.div`
   &:hover {
     color: #007bff;
     transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-left: 0.5rem;
   }
 `;
 
@@ -50,19 +72,38 @@ const SearchBar = styled.input`
   &::placeholder {
     color: #888;
   }
+
+  @media (max-width: 768px) {
+    width: 100px;
+    margin: 0;
+  }
 `;
 
-const TopBar = () => {
+const MenuToggle = styled.div`
+  display: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  margin-left: 1rem;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const TopBar = ({ toggleSidebar }) => {
   return (
     <TopBarContainer>
       <Logo>
         <Link to="/" style={{ color: '#f0f0f0', textDecoration: 'none' }}>Delote Technology</Link>
       </Logo>
       <ActionsContainer>
+        <MenuToggle onClick={toggleSidebar}>
+          <i className="fas fa-bars"></i> {/* Hamburger menu icon */}
+        </MenuToggle>
+        <SearchBar type="text" placeholder="Search..." />
         <Icon>
           <i className="fas fa-bell"></i> {/* Notification icon */}
         </Icon>
-        <SearchBar type="text" placeholder="Search..." />
         <Icon>
           <i className="fas fa-circle"></i> {/* Status icon */}
         </Icon>

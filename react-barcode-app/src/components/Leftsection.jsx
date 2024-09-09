@@ -1,17 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const LeftSectionContainer = styled.aside`
   grid-area: left;
   background: #2c2c2c; /* Dark background */
   padding: 1rem;
-  margin: 1rem;
   border: 1px solid #333; /* Border to create a box effect */
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Shadow effect */
   display: flex;
   flex-direction: column;
+  position: fixed; /* Keep it fixed on the side */
+  top: 8rem; /* Space for top bar */
+  left: 0;
+  height: calc(100vh - 4rem); /* Full height minus top bar */
+  width: 250px; /* Adjusted width */
+  transition: transform 0.3s ease;
+  transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(-100%)')};
+  z-index: 1000; /* Ensure it overlays other elements */
+  
+  @media (min-width: 769px) {
+    display: flex;
+    transform: translateX(0); /* Always visible on large screens */
+    position: relative; /* Change positioning on large screens */
+    height: auto; /* Adjust height */
+    top: 0rem; /* Reset top position */
+    padding:2rem;
+  }
 `;
 
 const Option = styled.div`
@@ -28,21 +44,15 @@ const Option = styled.div`
   }
 `;
 
-const LeftSection = () => {
-  const navigate = useNavigate();
-
-  const handleOptionClick = (path) => {
-    navigate(path);
-  };
-
+const LeftSection = ({ isOpen }) => {
   return (
-    <LeftSectionContainer>
-      <Option onClick={() => handleOptionClick('/')}>Home</Option>
-      <Option onClick={() => handleOptionClick('/orders')}>Orders</Option>
-      <Option onClick={() => handleOptionClick('/orders')}>Option 3</Option>
-      <Option onClick={() => handleOptionClick('/orders')}>Option 4</Option>
-      <Option onClick={() => handleOptionClick('/orders')}>Option 5</Option>
-      <Option onClick={() => handleOptionClick('/orders')}>Option 6</Option>
+    <LeftSectionContainer isOpen={isOpen}>
+      <Option as={Link} to="/">Home</Option>
+      <Option as={Link} to="/orders">Orders</Option>
+      <Option as={Link} to="/form1">Fill form</Option>
+      <Option as={Link} to="/orders">Option 4</Option>
+      <Option as={Link} to="/orders">Option 5</Option>
+      <Option as={Link} to="/orders">Option 6</Option>
     </LeftSectionContainer>
   );
 };

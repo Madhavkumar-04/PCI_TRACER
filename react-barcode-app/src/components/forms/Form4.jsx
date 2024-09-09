@@ -8,14 +8,26 @@ const FormContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
   background: #2c2c2c;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin: auto;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const InputRow = styled.div`
   display: flex;
+  flex-direction: column; /* Stack inputs vertically by default */
   gap: 1rem;
+
+  @media (min-width: 769px) {
+    flex-direction: row; /* Stack inputs horizontally on larger screens */
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 `;
 
 const Input = styled.input`
@@ -25,6 +37,10 @@ const Input = styled.input`
   border-radius: 4px;
   background: #121212;
   color: #fff;
+  font-size: 1rem;
+  box-sizing: border-box; /* Include padding and border in width */
+  max-width: 100%; /* Prevent exceeding container width */
+  
   &:focus {
     border-color: #007bff;
     outline: none;
@@ -39,8 +55,15 @@ const Button = styled.button`
   color: #fff;
   cursor: pointer;
   font-size: 1rem;
+  margin-top: 1rem;
+
   &:hover {
     background: #0056b3;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-top: 0.5rem;
   }
 `;
 
@@ -52,8 +75,7 @@ const Label = styled.label`
 
 const ErrorMessage = styled.div`
   color: #ff4d4d;
-  // margin-top: -0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.25rem;
 `;
 
 const Form4 = ({ formData, setFormData }) => {

@@ -6,7 +6,8 @@ import styled from 'styled-components';
 const ButtonContainer = styled.div`
   margin-top: 1rem;
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* Stack buttons vertically on small screens */
+  align-items: center;
   gap: 1rem;
 `;
 
@@ -32,7 +33,28 @@ const Button = styled.button`
   }
 `;
 
-const BarcodeSection = ({ barcodeValue, trackno}) => {
+const BarcodeWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  max-width: 100%;
+  overflow-x: auto;
+
+  @media (min-width: 288px) and (max-width: 600px) {
+    padding: 0.5rem;
+  }
+
+  @media (min-width: 601px) and (max-width: 900px) {
+    padding: 1rem;
+  }
+
+  @media (min-width: 901px) and (max-width: 1900px) {
+    padding: 1rem;
+  }
+`;
+
+const BarcodeSection = ({ barcodeValue, trackno }) => {
   const barcodeRef = useRef();
 
   useEffect(() => {
@@ -87,7 +109,7 @@ const BarcodeSection = ({ barcodeValue, trackno}) => {
   };
 
   return (
-    <div ref={barcodeRef}>
+    <BarcodeWrapper ref={barcodeRef}>
       {serializedBarcodeValue ? (
         <Barcode
           value={trackno}
@@ -104,7 +126,7 @@ const BarcodeSection = ({ barcodeValue, trackno}) => {
         <Button color="#007bff" hoverColor="#0056b3" onClick={handleDownloadPNG}>Download PNG</Button>
         <Button color="#007bff" hoverColor="#0056b3" onClick={handleDownloadPDF}>Download PDF</Button>
       </ButtonContainer>
-    </div>
+    </BarcodeWrapper>
   );
 };
 

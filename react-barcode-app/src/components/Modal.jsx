@@ -24,11 +24,19 @@ const ModalContent = styled.div`
   background: #1e1e1e;
   padding: 2rem;
   border-radius: 8px;
-  max-width: 600px;
-  width: 100%;
+  width: 70vw; /* 95% of viewport width */
+  height: 90vh; /* 95% of viewport height */
+  max-width: 95vw; /* Ensure it doesn’t exceed viewport width */
+  max-height: 95vh; /* Ensure it doesn’t exceed viewport height */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   position: relative;
   text-align: center;
+  overflow: auto; /* Allow scrolling if content overflows */
+
+  @media (max-width: 700px) {
+    width: 95vw; /* 95% of viewport width */
+  height: 95vh; /* 95% of viewport height */
+  }
 `;
 
 const CloseButton = styled.button`
@@ -54,9 +62,9 @@ const Modal = ({ isOpen, onClose, formData, onEdit, setFormData }) => {
   const navigate = useNavigate();
 
   const handleSaveClick = async (details) => {
-    let id = uuidv4()
+    const id = uuidv4();
     setTrackno(id);
-    const data = { trackno, details };
+    const data = { trackno: id, details };
 
     try {
       const response = await fetch('http://localhost:5000/api/tracks', {
@@ -75,9 +83,9 @@ const Modal = ({ isOpen, onClose, formData, onEdit, setFormData }) => {
       setFormData({
         senderDetails: {},
         receiverDetails: {},
-        shipingDetails: {},
+        shippingDetails: {},
         priceInfo: {},
-      })
+      });
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
     }
@@ -88,7 +96,7 @@ const Modal = ({ isOpen, onClose, formData, onEdit, setFormData }) => {
       toPng(barcodeRef.current)
         .then((dataUrl) => {
           const link = document.createElement('a');
-          link.download = `${formData.trackno}.png`;
+          link.download = `${trackno}.png`; // Use trackno directly
           link.href = dataUrl;
           link.click();
         })
@@ -104,7 +112,7 @@ const Modal = ({ isOpen, onClose, formData, onEdit, setFormData }) => {
         .then((dataUrl) => {
           const pdf = new jsPDF();
           pdf.addImage(dataUrl, 'PNG', 0, 0);
-          pdf.save(`${formData.trackno}.pdf`);
+          pdf.save(`${trackno}.pdf`); // Use trackno directly
         })
         .catch((err) => {
           console.error('Failed to download barcode:', err);
@@ -126,7 +134,12 @@ const Modal = ({ isOpen, onClose, formData, onEdit, setFormData }) => {
       <ModalContent id="modal-content">
         <CloseButton onClick={customOnClose}>×</CloseButton>
         {!showBarcode ? (
-          <DataSection formData={formData} onEdit={onEdit} onSave={handleSaveClick} onClose={onClose}/>
+          <DataSection
+            formData={formData}
+            onEdit={onEdit}
+            onSave={handleSaveClick}
+            onClose={onClose}
+          />
         ) : (
           <BarcodeSection
             trackno={trackno}

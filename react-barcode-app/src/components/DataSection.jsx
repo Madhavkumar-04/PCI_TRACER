@@ -76,7 +76,7 @@ const DataSection = ({ formData, onEdit, onSave,onClose }) => {
       <Section>
         <Label>Sender Address</Label>
         <Data>{renderData(formData.senderDetails)}</Data>
-        <EditButton onClick={() => onEdit('')}>Edit</EditButton>
+        <EditButton onClick={() => onEdit('form1')}>Edit</EditButton>
       </Section>
       <Section>
         <Label>Receiver Address</Label>

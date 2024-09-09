@@ -5,8 +5,18 @@ import styled from 'styled-components';
 const OrdersContainer = styled.div`
   padding: 20px;
   background: #1e1e1e;
-  min-height: 100vh;
   color: #fff;
+  height: auto; /* Ensures the container adjusts to content height */
+  width:auto;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    width: 90vw; /* Adjust width for very small screens */
+  }
 `;
 
 const OrderItem = styled.div`
@@ -16,6 +26,18 @@ const OrderItem = styled.div`
   border: 1px solid #444;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  word-wrap: break-word; /* Ensures text wraps within the container */
+  height: auto; /* Ensures the container adjusts to content height */
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    margin: 5px 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    margin: 3px 0;
+  }
 `;
 
 const DetailsContainer = styled.div`
@@ -25,6 +47,17 @@ const DetailsContainer = styled.div`
   overflow-x: auto;
   margin-top: 10px;
   border: 1px solid #444;
+  height: auto; /* Ensures the container adjusts to content height */
+
+  @media (max-width: 768px) {
+    padding: 8px;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 5px;
+    margin-top: 5px;
+  }
 `;
 
 const JSONTree = styled.div`
@@ -33,6 +66,18 @@ const JSONTree = styled.div`
   border-left: 2px solid #444;
   font-family: 'Courier New', Courier, monospace;
   line-height: 1.5;
+
+  @media (max-width: 768px) {
+    margin-left: 15px;
+    padding-left: 8px;
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 480px) {
+    margin-left: 10px;
+    padding-left: 5px;
+    font-size: 0.75rem;
+  }
 `;
 
 const JSONKey = styled.span`
@@ -89,7 +134,7 @@ const Orders = () => {
         <OrderItem key={order._id}>
           <p><strong>Track Number:</strong> {order.trackno}</p>
           <p><strong>Details:</strong></p>
-          <DetailsContainer>{renderObject(parseDetails(order.details))}</DetailsContainer>
+          <DetailsContainer>{renderObject(parseDetails(order.details) || {})}</DetailsContainer>
         </OrderItem>
       ))}
     </OrdersContainer>
